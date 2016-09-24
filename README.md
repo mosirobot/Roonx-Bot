@@ -7,7 +7,7 @@ sudo apt-get install libreadline-dev libconfig-dev libssl-dev lua5.2 liblua5.2-d
 
 # Let's install the bot.
 cd $HOME
-git clone https://github.com/mosirobot/Roonx-Bot.git -b supergroups
+git clone https://github.com/mosirobot/Roonx-Bot.git
 cd Roonx-Bot
 chmod +x launch.sh
 ./launch.sh install
