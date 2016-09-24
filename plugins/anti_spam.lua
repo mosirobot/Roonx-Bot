@@ -1,4 +1,4 @@
---An empty table for solving multiple kicking problem(thanks to @topkecleon )
+﻿--An empty table for solving multiple kicking problem(thanks to @topkecleon )
 kicktable = {}
 
 do
@@ -108,10 +108,10 @@ local function pre_process(msg)
 	  if msg.to.type == 'chat' or msg.to.type == 'channel' then
 		if username then
 			savelog(msg.to.id, name_log.." @"..username.." ["..msg.from.id.."] kicked for #spam")
-			send_large_msg(receiver , "Flooding is not allowed here\n@"..username.."["..msg.from.id.."]\nStatus: User kicked")
+			send_large_msg(receiver , "<b>➡ فرستادن پیام های پشت سر هم در این جا ممنوع است</b>\n@"..username.."["..msg.from.id.."]\nکاربر پاک شد")
 		else
 			savelog(msg.to.id, name_log.." ["..msg.from.id.."] kicked for #spam")
-			send_large_msg(receiver , "Flooding is not allowed here\nName:"..name_log.."["..msg.from.id.."]\nStatus: User kicked")
+			send_large_msg(receiver , "<b>➡ فرستادن پیام های پشت سر هم در این جا ممنوع است</b>\nنام:"..name_log.."["..msg.from.id.."]\nکاربر پاک شد")
 		end
 	  end
       -- incr it on redis
@@ -141,7 +141,7 @@ local function pre_process(msg)
 		  local GBan_log =  data[tostring(GBan_log)]
 		  for k,v in pairs(GBan_log) do
 			log_SuperGroup = v
-			gban_text = "User [ "..name.." ] ( @"..username.." )"..msg.from.id.." Globally banned from ( "..msg.to.print_name.." ) [ "..msg.to.id.." ] (spamming)"
+			gban_text = "<b>➡ کاربر</b> [ "..name.." ] ( @"..username.." )"..msg.from.id.." <b>سوپر بن شد از</b> ( "..msg.to.print_name.." ) [ "..msg.to.id.." ] (اسپم شناخته شد)"
 			--send it to log group/channel
 			send_large_msg(log_SuperGroup, gban_text)
 		  end

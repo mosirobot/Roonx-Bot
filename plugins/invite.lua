@@ -1,4 +1,4 @@
-do
+﻿do
 local function callbackres(extra, success, result)
 --vardump(result)
   local user = 'user#id'..result.peer_id
@@ -21,11 +21,11 @@ function run(msg, matches)
 	return
   end
   if not is_admin1(msg) then -- For admins only !
-		return 'Only admins can invite.'
+		return '<b>➡ فقط ادمین ها میتوانند دعوت بدن</b>'
   end
   if not is_realm(msg) then
     if data[tostring(msg.to.id)]['settings']['lock_member'] == 'yes' and not is_admin1(msg) then
-		  return 'Group is private.'
+		  return '<b>➡ گروه خصوصی است</b>'
     end
   end
 	if msg.to.type ~= 'chat' or msg.to.type ~= 'channel' then 

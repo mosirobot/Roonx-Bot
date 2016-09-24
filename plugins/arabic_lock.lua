@@ -1,4 +1,4 @@
-antiarabic = {}-- An empty table for solving multiple kicking problem
+﻿antiarabic = {}-- An empty table for solving multiple kicking problem
 
 do
 local function run(msg, matches)
@@ -19,9 +19,9 @@ local function run(msg, matches)
 		local username = msg.from.username
 		local name = msg.from.first_name
 		if username and is_super_group(msg) then
-			send_large_msg(receiver , "Arabic/Persian is not allowed here\n@"..username.."["..msg.from.id.."]\nStatus: User kicked/msg deleted")
+			send_large_msg(receiver , "<b>➡ فارسی/عربی در اینجا ممنوع است</b>\n@"..username.."["..msg.from.id.."]\n<b> از گروه پاک شد و پیامش پاک شد</b>")
 		else
-			send_large_msg(receiver , "Arabic/Persian is not allowed here\nName: "..name.."["..msg.from.id.."]\nStatus: User kicked/msg deleted")
+			send_large_msg(receiver , "<b>➡ فارسی/عربی در اینجا ممنوع است</b>\nنام: "..name.."["..msg.from.id.."]\n<b> از گروه پاک شد و پیامش پاک شد</b>")
 		end
 		local name = user_print_name(msg.from)
 		savelog(msg.to.id, name.." ["..msg.from.id.."] kicked (arabic was locked) ")

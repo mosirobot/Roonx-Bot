@@ -1,4 +1,4 @@
-local function set_bot_photo(msg, success, result)
+﻿local function set_bot_photo(msg, success, result)
   local receiver = get_receiver(msg)
   if success then
     local file = 'data/photos/bot.jpg'
@@ -6,11 +6,11 @@ local function set_bot_photo(msg, success, result)
     os.rename(result, file)
     print('File moved to:', file)
     set_profile_photo(file, ok_cb, false)
-    send_large_msg(receiver, 'Photo changed!', ok_cb, false)
+    send_large_msg(receiver, '<b>➡ عکس تنظیم شد </b>', ok_cb, false)
     redis:del("bot:photo")
   else
     print('Error downloading: '..msg.id)
-    send_large_msg(receiver, 'Failed, please try again!', ok_cb, false)
+    send_large_msg(receiver, '<b>➡ خطا! لطفا دوباره سعی کنید </b>', ok_cb, false)
   end
 end
 
@@ -25,7 +25,7 @@ local function logadd(msg)
 	end
 	data[tostring(GBan_log)][tostring(msg.to.id)] = msg.to.peer_id
 	save_data(_config.moderation.data, data)
-	local text = 'Log_SuperGroup has has been set!'
+	local text = '<b>➡ سوپر گروه تنظیم شد </b>'
 	reply_msg(msg.id,text,ok_cb,false)
 	return
 end
@@ -41,7 +41,7 @@ local function logrem(msg)
 	end
 	data[tostring(GBan_log)][tostring(msg.to.id)] = nil
 	save_data(_config.moderation.data, data)
-	local text = 'Log_SuperGroup has has been removed!'
+	local text = '<b>➡ سوپر گروه از لیست گروه ها پاک شد </b>'
 	reply_msg(msg.id,text,ok_cb,false)
 	return
 end
@@ -77,10 +77,10 @@ local function get_dialog_list_callback(cb_extra, success, result)
   for k,v in pairsByKeys(result) do
     if v.peer then
       if v.peer.type == "chat" then
-        text = text.."group{"..v.peer.title.."}["..v.peer.id.."]("..v.peer.members_num..")"
+        text = text.."<b>➡ گروه {"..v.peer.title.."}["..v.peer.id.."]("..v.peer.members_num..")</b>"
       else
         if v.peer.print_name and v.peer.id then
-          text = text.."user{"..v.peer.print_name.."}["..v.peer.id.."]"
+          text = text.."<b>➡ کاربر {"..v.peer.print_name.."}["..v.peer.id.."]</b>"
         end
         if v.peer.username then
           text = text.."("..v.peer.username..")"
@@ -91,16 +91,16 @@ local function get_dialog_list_callback(cb_extra, success, result)
       end
     end
     if v.message then
-      text = text..'\nlast msg >\nmsg id = '..v.message.id
+      text = text..'\n<b>➡ پیام های اخیر \nایدی پیام = </b>'..v.message.id
       if v.message.text then
-        text = text .. "\n text = "..v.message.text
+        text = text .. "\n <b>➡ متن </b> = "..v.message.text
       end
       if v.message.action then
         text = text.."\n"..serpent.block(v.message.action, {comment=false})
       end
       if v.message.from then
         if v.message.from.print_name then
-          text = text.."\n From > \n"..string.gsub(v.message.from.print_name, "_"," ").."["..v.message.from.id.."]"
+          text = text.."\n <b>➡ از</b> \n"..string.gsub(v.message.from.print_name, "_"," ").."["..v.message.from.id.."]"
         end
         if v.message.from.username then
           text = text.."( "..v.message.from.username.." )"
@@ -167,35 +167,35 @@ local function run(msg,matches)
     end
     if matches[1] == "setbotphoto" then
     	redis:set("bot:photo", "waiting")
-    	return 'Please send me bot photo now'
+    	return '<b>➡ لطفا عکسی جدید ارسال کنید</b>'
     end
     if matches[1] == "markread" then
     	if matches[2] == "on" then
     		redis:set("bot:markread", "on")
-    		return "Mark read > on"
+    		return "<b>➡ ربات از این پس چت هارو باز میکند</b>"
     	end
     	if matches[2] == "off" then
     		redis:del("bot:markread")
-    		return "Mark read > off"
+    		return "<b>➡ ربات از این پس چت هارو باز نمیکند</b>"
     	end
     	return
     end
     if matches[1] == "pm" then
-    	local text = "Message From "..(msg.from.username or msg.from.last_name).."\n\nMessage : "..matches[3]
+    	local text = "<b>➡ پیام از</b> "..(msg.from.username or msg.from.last_name).."\n\n<b>➡ پیام</b> : "..matches[3]
     	send_large_msg("user#id"..matches[2],text)
-    	return "Message has been sent"
+    	return "<b>➡ پیام ارسال شد</b>"
     end
     
     if matches[1] == "pmblock" then
     	if is_admin2(matches[2]) then
-    		return "You can't block admins"
+    		return "<b>➡ شما نمیتوانید ادمین هارو بلاک کنید</b>"
     	end
     	block_user("user#id"..matches[2],ok_cb,false)
-    	return "User blocked"
+    	return "<b>➡ کاربر مورد نظر بلاک شد</b>"
     end
     if matches[1] == "pmunblock" then
     	unblock_user("user#id"..matches[2],ok_cb,false)
-    	return "User unblocked"
+    	return "<b>➡ کاربر مورد نظر آنبلاک شد</b>"
     end
     if matches[1] == "import" then--join by group link
     	local hash = parsed_url(matches[2])
@@ -206,21 +206,21 @@ local function run(msg,matches)
     		return
     	end
       get_contact_list(get_contact_list_callback, {target = msg.from.id})
-      return "I've sent contact list with both json and text format to your private"
+      return "<b>➡ من لیست مخاطبین خود را به صورت txt و json در شخصی شما ارسال کردم</b>"
     end
     if matches[1] == "delcontact" then
 	    if not is_sudo(msg) then-- Sudo only
     		return
     	end
       del_contact("user#id"..matches[2],ok_cb,false)
-      return "User "..matches[2].." removed from contact list"
+      return "<b>➡ کاربر </b>"..matches[2].." <b> از مخاطبین من پاک شد</b>"
     end
     if matches[1] == "addcontact" and is_sudo(msg) then
     phone = matches[2]
     first_name = matches[3]
     last_name = matches[4]
     add_contact(phone, first_name, last_name, ok_cb, false)
-   return "User With Phone +"..matches[2].." has been added"
+   return "<b>➡ کاربر با شماره تلفن</b> +"..matches[2].."<b> به مخاطبین من اضافه شد</b>"
 end
  if matches[1] == "sendcontact" and is_sudo(msg) then
     phone = matches[2]
@@ -230,7 +230,7 @@ end
 end
  if matches[1] == "mycontact" and is_sudo(msg) then
 	if not msg.from.phone then
-		return "I must Have Your Phone Number!"
+		return "<b>➡ من باید شماره تلفن شمارو داشته باشم</b>"
     end
     phone = msg.from.phone
     first_name = (msg.from.first_name or msg.from.phone)
@@ -240,7 +240,7 @@ end
 
     if matches[1] == "dialoglist" then
       get_dialog_list(get_dialog_list_callback, {target = msg.from.id})
-      return "I've sent a group dialog list with both json and text format to your private messages"
+      return "<b>➡ من لیست چت های خود را به صورت txt و json در شخصی شما ارسال کردم</b>"
     end
     if matches[1] == "whois" then
       user_info("user#id"..matches[2],user_info_callback,{msg=msg})
@@ -255,14 +255,14 @@ end
     	for k,v in pairs(jdat) do
 			redis:hset('user:'..v, 'print_name', k)
 			banall_user(v)
-      		print(k, v.." Globally banned")
+      		print(k, v.." <b> سوپر بن شد</b>")
     	end
     end
 	if matches[1] == 'reload' then
 		receiver = get_receiver(msg)
 		reload_plugins(true)
-		post_msg(receiver, "Reloaded!", ok_cb, false)
-		return "Reloaded!"
+		post_msg(receiver, "<b>➡ پلاگین ها به روز شد</b>", ok_cb, false)
+		return "<b>➡ پلاگین ها به روز شد</b>"
 	end
 	--[[*For Debug*
 	if matches[1] == "vardumpmsg" and is_admin1(msg) then
@@ -275,23 +275,23 @@ end
 		if not long_id then
 			data[tostring(msg.to.id)]['long_id'] = msg.to.peer_id 
 			save_data(_config.moderation.data, data)
-			return "Updated ID"
+			return "<b>➡ ایدی به روز شد</b>"
 		end
 	end
 	if matches[1] == 'addlog' and not matches[2] then
 		if is_log_group(msg) then
-			return "Already a Log_SuperGroup"
+			return "<b>➡ سوپرگروه از قبل تنظیم شده</b>"
 		end
-		print("Log_SuperGroup "..msg.to.title.."("..msg.to.id..") added")
-		savelog(msg.to.id, name_log.." ["..msg.from.id.."] added Log_SuperGroup")
+		print("<b>➡ سوپرگروه</b> "..msg.to.title.."("..msg.to.id..") <b>تنظیم شد</b>")
+		savelog(msg.to.id, name_log.." ["..msg.from.id.."] <b>تنظیم شد</b>")
 		logadd(msg)
 	end
 	if matches[1] == 'remlog' and not matches[2] then
 		if not is_log_group(msg) then
-			return "Not a Log_SuperGroup"
+			return "<b>➡ سوپرگروه تنظیم نشده</b>"
 		end
-		print("Log_SuperGroup "..msg.to.title.."("..msg.to.id..") removed")
-		savelog(msg.to.id, name_log.." ["..msg.from.id.."] added Log_SuperGroup")
+		print("<b>➡ سوپرگروه</b> "..msg.to.title.."("..msg.to.id..") از لیست حذف شد")
+		savelog(msg.to.id, name_log.." ["..msg.from.id.."] <b>تنظیم شد</b>")
 		logrem(msg)
 	end
     return
@@ -329,6 +329,4 @@ return {
   run = run,
   pre_process = pre_process
 }
---By @imandaneshi :)
---https://github.com/SEEDTEAM/TeleSeed/blob/test/plugins/admin.lua
----Modified by @Rondoozle for supergroups
+
