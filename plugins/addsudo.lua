@@ -1,4 +1,4 @@
-﻿do
+do
 local function callback(extra, success, result)
 vardump(success)
 vardump(result)
@@ -27,13 +27,14 @@ end
 end
 return {
 description = "دعوت سودو به گروه",
+    Ernest = {
+    	"Created by: @Ernest_Channel",
     },
 patterns = {
-"^[!/#]([Aa]ddsudo)$",
+"^[!/#](addsudo)$",
 "^([Aa]ddsudo)$"
 
 },
 run = run
 }
 end
-
